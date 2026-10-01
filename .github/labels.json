@@ -4,6 +4,6 @@
   { "name": "admin", "color": "808E6B", "description": "forge-admin (React admin app)" },
   { "name": "infra", "color": "899CAD", "description": "CI, Docker, hosting, operations" },
   { "name": "sync", "color": "847153", "description": "Forge <-> Heritage contract - needs a matching change in heritage-website" },
-  { "name": "privacy", "color": "B91C1C", "description": "Touches member / personal data (POPIA)" },
+  { "name": "privacy", "color": "B91C1C", "description": "Touches personal data: staff accounts, contact messages (POPIA)" },
   { "name": "design", "color": "C6B08D", "description": "Brand, style guide, UI" }
 ]

@@ -1,24 +1,19 @@
 # Data Privacy (POPIA)
 
-Forge stores personal information about South African data subjects, so the **Protection of Personal Information Act (POPIA)** applies. Church members' names, phone numbers, birthdays, anniversaries, photos and family relationships are all personal information.
+There's **no member directory** on this platform, so the personal data Forge holds is small. POPIA (the Protection of Personal Information Act) still applies to it:
 
-## Principles applied
+| Data | Where | Why we hold it |
+|---|---|---|
+| Staff accounts | Forge `app_user` | Logging in to Forge Admin |
+| Contact form messages (name, email, optional phone, message) | Heritage briefly, then Forge inbox | Replying to enquiries |
+| Names, photos and bios of pastors, elders and preachers | Public website | Published with the person's agreement |
 
-| POPIA condition | What we do |
-|---|---|
-| Accountability | The church appoints and registers an **Information Officer** with the Information Regulator |
-| Processing limitation | Collect only what the directory needs. Get consent when a member is added (`consent_at`) |
-| Purpose specification | Directory data is for church fellowship only. It's never synced to the public website, never sold, never exported in bulk |
-| Further processing | No marketing use |
-| Information quality | Members can edit their own profile |
-| Openness | A privacy notice on the website and in the admin app |
-| Security safeguards | TLS everywhere, encrypted backups, BCrypt passwords, role-based access, audit log on member data, login lockout |
-| Data subject participation | Members can view, correct and request deletion of their data, which an admin actions within 30 days |
+## Rules
 
-## Technical rules
-
-- Member data is served **only** under `/api/members/**` and `/api/admin/members/**`, and only to signed-in users.
-- `directory_visible = false` hides a member from everyone but admins.
-- No personal data in logs, error reports (scrub Sentry) or sync payloads.
-- Contact messages are deleted 12 months after being handled.
-- If there's a breach, notify the Information Regulator and affected members as soon as reasonably possible. The procedure is kept in the church's operations notes.
+- **Consent for public people:** get the agreement of every leader or preacher before publishing their photo and bio.
+- **Contact messages:** use them only to reply. Delete them from Forge 12 months after they're handled, and from Heritage once they're delivered to Forge (30 days at most).
+- **Privacy notice:** a short notice under the contact form and in the site footer.
+- **Security:** TLS everywhere, BCrypt passwords, login lockout, encrypted backups, and no personal data in logs or error reports (scrub Sentry).
+- **Information Officer:** by default this is the church's head (the senior pastor or chair of the elders). Record who it is.
+- **Breach:** notify the Information Regulator and the affected people as soon as reasonably possible.
+- **Hosting outside South Africa** is allowed for this data when the provider offers adequate protection (e.g. EU-hosted with GDPR terms). Record the choice in [Deployment](Deployment.md).

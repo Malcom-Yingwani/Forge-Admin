@@ -12,7 +12,6 @@ za.co.heritagebaptist.forge
 ├── auth/       AppUser, AuthController, JwtService, RefreshTokenService, PasswordResetService
 ├── content/    sermon/, series/, preacher/, event/, page/, faq/, leader/, ministry/, group/, servicetime/, settings/
 ├── media/      MediaAsset, StorageService (LocalDiskStorage | S3Storage), ImageVariants, AudioMetadata
-├── member/     Member, Family, MemberController, UpcomingService
 ├── inbox/      ContactMessage, InboxController (/internal/inbox/**, signed)
 ├── issue/      IssueReport
 └── sync/       SyncOutbox, OutboxWriter, OutboxDispatcher (@Scheduled), HeritageClient, SnapshotService
@@ -41,18 +40,13 @@ GET  /api/admin/contact-messages    PATCH /{id} (handled)   DELETE /{id}
 GET  /api/admin/issues              PATCH /{id} (status)
 GET  /api/admin/sync/status         POST /api/admin/sync/resync     POST /api/admin/sync/outbox/{id}/retry
 /api/admin/users                    (ADMIN only)
-/api/admin/members  /api/admin/families
 ```
 Every collection supports `GET` (paged, `?q=&sort=`), `GET /{id}`, `POST`, `PUT /{id}` (with `version`), `DELETE /{id}`, and `POST /{id}/publish` and `/unpublish` where relevant.
 
-### Members (any signed-in user)
+### Any signed-in user
 ```
-GET  /api/members?q=&role=&family=&sort=
-GET  /api/members/{id}
-GET  /api/members/families
-GET  /api/members/upcoming?days=14
-GET|PUT /api/members/me      POST /api/members/me/photo
-POST /api/issues
+GET|PUT /api/auth/me          own name, email, password
+POST /api/issues              report an issue
 ```
 
 ### Internal (HMAC-signed, from heritage-api)

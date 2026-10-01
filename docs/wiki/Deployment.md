@@ -15,4 +15,4 @@
 - [ ] Nightly encrypted `pg_dump` off-site, a media bucket with versioning, and a tested restore
 - [ ] Uptime and Sentry alerts, with PII scrubbed
 - [ ] Sync outbox alert if anything is pending for more than 30 minutes
-- [ ] POPIA items in [Data Privacy](Data-Privacy-POPIA.md) done before importing real member data
+- [ ] POPIA items in [Data Privacy](Data-Privacy-POPIA.md) done before launch

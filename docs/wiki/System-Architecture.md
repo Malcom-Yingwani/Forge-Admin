@@ -6,8 +6,8 @@ The Heritage Baptist Church platform is **two repositories, four apps**:
 |---|---|---|---|---|
 | [heritage-website](https://github.com/Malcom-Yingwani/heritage-website) | **heritage-api** | Java 21 · Spring Boot 3 · PostgreSQL | 8080 | Read side. Keeps its **own full copy** of published content and media, and serves every public request from it |
 | | **heritage-web** | React · Vite | 5173 | Public website, www.heritagebaptist.co.za |
-| [forge-admin](https://github.com/Malcom-Yingwani/forge-admin) | **forge-api** | Java 21 · Spring Boot 3 · PostgreSQL | 8081 | Write side. **Owns all data**, handles auth, member directory and media uploads, and pushes changes to heritage-api |
-| | **forge-admin** | React · Vite | 5174 | Staff admin app and member directory, admin.heritagebaptist.co.za |
+| [forge-admin](https://github.com/Malcom-Yingwani/forge-admin) | **forge-api** | Java 21 · Spring Boot 3 · PostgreSQL | 8081 | Write side. **Owns all data**, handles staff logins and media uploads, and pushes changes to heritage-api |
+| | **forge-admin** | React · Vite | 5174 | Staff admin app (content management), admin.heritagebaptist.co.za |
 
 ```mermaid
 flowchart LR
@@ -17,8 +17,8 @@ flowchart LR
   HAPI --> HDB[(Heritage DB<br/>read copy)]
   HAPI --> HMEDIA[(Heritage media<br/>mirror)]
 
-  S[Staff & members] --> ADM[forge-admin]
-  ADM -->|/api/auth /api/admin /api/members| FAPI[forge-api]
+  S[Church staff] --> ADM[forge-admin]
+  ADM -->|/api/auth /api/admin| FAPI[forge-api]
   FAPI --> FDB[(Forge DB<br/>source of truth)]
   FAPI --> FMEDIA[(Forge media)]
 
@@ -45,7 +45,6 @@ This is the same guarantee the Node MVPs proved, now in Java:
 | Events, pages, FAQs, leaders, growth groups, ministries, service times, site settings | ✔ | ✔ published only |
 | Media files | ✔ | ✔ mirrored |
 | Users, roles, sessions | ✔ | ✘ |
-| **Members, families, birthdays, anniversaries** | ✔ | ✘ **never synced** (POPIA) |
 | Contact messages | ✔ inbox | ✔ stored briefly until delivered to Forge, then purged after N days |
 | Issue reports | ✔ | ✘ |
 

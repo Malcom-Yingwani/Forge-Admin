@@ -7,8 +7,6 @@ erDiagram
   PREACHER ||--o{ SERMON : preaches
   SERMON_SERIES ||--o{ SERMON : contains
   MEDIA_ASSET ||--o{ SERMON : "audio/cover"
-  FAMILY ||--o{ MEMBER : has
-  MEMBER |o--o| APP_USER : "login for"
   APP_USER ||--o{ AUDIT_LOG : writes
   APP_USER ||--o{ ISSUE_REPORT : reports
 ```
@@ -34,10 +32,8 @@ erDiagram
 
 | Entity | Key fields |
 |---|---|
-| `AppUser` | email, password_hash (BCrypt), display_name, role, enabled, last_login_at, member_id |
+| `AppUser` | email, password_hash (BCrypt), display_name, role (ADMIN/EDITOR), enabled, last_login_at |
 | `RefreshToken` | user, token_hash, expires_at, revoked |
-| `Family` | name, photo, address |
-| `Member` | first/last name, email, phone_country_code, phone, date_of_birth, anniversary_date, church_role (ELDER/DEACON/MEMBER), family, photo, directory_visible, consent_at, notes |
 | `ContactMessage` | name, email, phone, subject, message, received_at, handled, handled_by |
 | `IssueReport` | reporter, category (BUG/CONTENT/DATA/OTHER), description, page_url, user_agent, status |
 | `AuditLog` | actor, action, entity_type, entity_id, at, diff |
@@ -48,4 +44,3 @@ erDiagram
 - A slug is unique per type, generated from the title and editable.
 - Unpublishing or deleting content writes a `DELETE` outbox event. See [Sync Protocol](Sync-Protocol.md).
 - Scripture books are stored as canonical names with a Bible-order index for sorting.
-- Upcoming birthdays and anniversaries handle the Dec→Jan wrap and 29 February.

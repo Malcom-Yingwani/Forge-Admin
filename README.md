@@ -1,11 +1,11 @@
 # Forge Admin
 
-**Forge** is the content-management and member-directory platform for **Heritage Baptist Church, Johannesburg**. It owns the church's data and publishes website content to the [Heritage Website](https://github.com/Malcom-Yingwani/heritage-website).
+**Forge** is the content-management platform for **Heritage Baptist Church, Johannesburg**. It owns the church's data and publishes website content to the [Heritage Website](https://github.com/Malcom-Yingwani/heritage-website).
 
 | App | Folder | Stack |
 |---|---|---|
-| **forge-api**: source of truth, covering auth, content, media, member directory and sync to Heritage | `api/` | Java 21 · Spring Boot 3 · PostgreSQL |
-| **forge-admin**: staff admin app and members-only directory | `admin/` | React · Vite |
+| **forge-api**: source of truth, covering staff auth, content, media and sync to Heritage | `api/` | Java 21 · Spring Boot 3 · PostgreSQL |
+| **forge-admin**: staff admin app | `admin/` | React · Vite |
 
 ## Documentation
 
@@ -23,4 +23,4 @@ To publish these pages to the GitHub Wiki tab, run `scripts/publish-wiki.sh`.
 
 Planning. The work is tracked in the [issues](https://github.com/Malcom-Yingwani/forge-admin/issues), grouped under epics.
 
-> This repository is public. Never commit member data, real credentials or secrets. See [Data Privacy (POPIA)](docs/wiki/Data-Privacy-POPIA.md).
+> This repository is public. Never commit personal data, real credentials or secrets. See [Data Privacy (POPIA)](docs/wiki/Data-Privacy-POPIA.md).

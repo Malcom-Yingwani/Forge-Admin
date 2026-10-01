@@ -1,11 +1,11 @@
 # Forge Admin Wiki
 
-**Forge** is where Heritage Baptist Church, Johannesburg manages everything: website content, sermon audio, and the church member directory. It owns the data and pushes published content to the public [Heritage Website](https://github.com/Malcom-Yingwani/heritage-website).
+**Forge** is where Heritage Baptist Church, Johannesburg manages everything: website content and sermon audio. It owns the data and pushes published content to the public [Heritage Website](https://github.com/Malcom-Yingwani/heritage-website).
 
 | App | Folder | Stack | Purpose |
 |---|---|---|---|
-| **forge-api** | `api/` | Java 21 · Spring Boot 3 · PostgreSQL | Source of truth: auth, content CRUD, media uploads, member directory, sync to Heritage |
-| **forge-admin** | `admin/` | React · Vite | Staff admin app and members-only directory |
+| **forge-api** | `api/` | Java 21 · Spring Boot 3 · PostgreSQL | Source of truth: staff auth, content CRUD, media uploads, sync to Heritage |
+| **forge-admin** | `admin/` | React · Vite | Staff admin app |
 
 ## Pages
 
@@ -30,4 +30,3 @@
 |---|---|
 | `ADMIN` | Everything, including users, roles and settings |
 | `EDITOR` | Manage website content: sermons, events, pages, leaders, groups, ministries |
-| `MEMBER` | Sign in to view the member directory and edit their own profile |

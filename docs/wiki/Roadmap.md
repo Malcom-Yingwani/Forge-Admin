@@ -24,7 +24,6 @@ Issues: <https://github.com/Malcom-Yingwani/Forge-Admin/issues>
 | #13 | **Sync to Heritage:** transactional outbox, signed webhooks & retry dispatcher |
 | #14 | Sync status, retry & full resync endpoints |
 | #15 | Contact inbox: receive messages from heritage-api |
-| #16 | Member directory API |
 | #17 | "Report an issue" endpoint |
 | #18 | OpenAPI docs, ProblemDetail errors, audit log & conventions |
 
@@ -33,12 +32,11 @@ Issues: <https://github.com/Malcom-Yingwani/Forge-Admin/issues>
 | # | Issue |
 |---|---|
 | #19 | Login, password reset, auth guard & app shell |
-| #20 | Dashboard: stat cards, sync health, upcoming birthdays & anniversaries |
+| #20 | Dashboard: stat cards, sync health & upcoming items |
 | #21 | Sermon management: sermons, series, preachers & MP3 upload |
 | #22 | Events management |
 | #23 | Pages, FAQs, service times & site settings |
 | #24 | Leaders, ministries & growth groups management |
-| #25 | Member directory UI |
 | #26 | User & role management |
 | #27 | Inbox (contact messages) & "Report an issue" modal |
 | #28 | Sync screen: outbox status, failed deliveries, retry & resync |
@@ -50,12 +48,13 @@ Issues: <https://github.com/Malcom-Yingwani/Forge-Admin/issues>
 |---|---|
 | #30 | Containerize & deploy forge-api and forge-admin |
 | #31 | Backups, monitoring & alerting |
-| #32 | POPIA compliance for member data |
+| #32 | POPIA: contact messages, staff accounts & published people |
 
 ## Milestones (suggested)
 
 1. **M1: Skeleton.** #5–#8, #9, #10, #19
 2. **M2: Sermons end-to-end.** #11, #12, #13, #21. A sermon published in Forge plays on the Heritage site, including during a Forge outage
 3. **M3: All website content.** #14, #15, #20, #22–#24, #27–#29
-4. **M4: Member directory.** #16, #25, #26, #32
-5. **M5: Production.** #17, #18, #30, #31
+4. **M4: Production.** #17, #18, #26, #30–#32
+
+_#16 and #25 (member directory) were closed: there's no directory in this project._

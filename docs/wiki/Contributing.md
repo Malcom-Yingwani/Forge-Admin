@@ -16,7 +16,7 @@
 | `admin` | forge-admin (React) |
 | `infra` | CI, Docker, hosting |
 | `sync` | Forge ↔ Heritage contract. Needs a matching change in heritage-website |
-| `privacy` | Touches member or personal data. Review against [POPIA](Data-Privacy-POPIA.md) |
+| `privacy` | Touches personal data (staff accounts, contact messages). Review against [POPIA](Data-Privacy-POPIA.md) |
 | `design` | Brand and UI |
 | `good first issue` | Small and well-scoped |
 

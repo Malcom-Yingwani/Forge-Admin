@@ -1,6 +1,6 @@
 # Brand and Design System
 
-Sources: the **Heritage Baptist Church Style Guide** (Sharon Martin Design) and the existing `site.css` used by the HBC member directory. Where the two disagree, the [decisions](#decisions) below say which one wins.
+Sources: the **Heritage Baptist Church Style Guide** (Sharon Martin Design) and the `site.css` from the earlier HBC Directory project, reused here for its brand tokens and generic components only. Where the two disagree, the [decisions](#decisions) below say which one wins.
 
 > The style guide's own advice: *"These are guidelines, not rules. Feel free to be creative, but not so creative that what you create no longer merges well with our other messages."*
 
@@ -77,26 +77,26 @@ On the website, build these as a CSS component (`.ministry-mark`) rather than im
 |---|---|---|
 | Fixed dark navbar with 3px Mustard bottom border, uppercase links, animated hamburger | `.navbar`, `.nav-link`, `.hamburger` | web, admin |
 | Buttons | `.btn-primary` (Mustard fill, dark text), `.btn-outline-primary`, `.btn-outline-secondary`, `.btn-danger`, `.btn-logout` | web, admin |
-| Pill search bar | `.search-bar-wrap`, `.search-icon-btn` | sermons archive, member directory |
+| Pill search bar | `.search-bar-wrap`, `.search-icon-btn` | sermons archive, admin lists |
 | Select with chevron | `.select-wrap` | filters |
 | Warm and dark sections | `.section-warm`, `.section-dark` | web |
 | Forms | `.form-control`, `.form-select`, `.form-label` (uppercase Montserrat) | web, admin |
 | Alerts | `.alert-success` (olive tint), `.alert-danger` | web, admin |
 | Modal with dark header and Mustard border | `.modal-header` | web, admin |
 | Toasts | `.app-toast-*` | admin |
-| Lightbox | `.app-lightbox` | admin (member photos), web (galleries) |
+| Lightbox | `.app-lightbox` | web (galleries), admin (image previews) |
 | Login page | `.login-page`, `.login-card`, `.login-header`, `.login-divider` | admin |
 | Admin cards and stats | `.admin-card`, `.admin-stat-card`, `.admin-form-grid`, `.admin-list-item` | admin |
-| Member directory | `.member-card`, `.badge-role-circle--*`, `.badge-family`, `.family-group*`, `.upcoming-*` | admin |
 | Tables | `.table`, `.table-avatar` | admin |
 | Empty state | `.empty-state` | web, admin |
+
+> **Not carried over:** the member-directory styles in `site.css` (`.member-card`, `.badge-role-circle--*`, `.badge-family`, `.family-group*`, `.upcoming-*`, `.ring`) belong to the HBC Directory project. This platform has no member directory.
 
 ### Bugs in `site.css` to fix when porting
 
 - `--shadow-xl` is used by `.login-card` but never defined.
 - The toast styles use the undefined `--dir-mustard`, `--dir-dark` and `--dir-grey`. Map them to `--color-primary`, `--color-dark` and a grey token.
 - `.report-issue-category-btn` uses `--color-light2`, a typo for `--color-light-2`.
-- `.badge-family` sets `padding-top` and then overrides it with `padding`.
 - `header { height: 50px }` disagrees with the comment saying the header reserves 70px. Make the navbar height a single token, `--nav-height`.
 
 ## Tokens file

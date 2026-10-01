@@ -32,7 +32,7 @@ All endpoints are under `/internal/sync/**`. They aren't exposed through the pub
 - `op` is `UPSERT` or `DELETE`. **Unpublishing is sent as `DELETE`**, because Heritage only stores published content.
 - **Idempotent:** Heritage records every applied `eventId` and returns `200` for duplicates without re-applying them.
 - **Ordering:** Heritage ignores an event whose `version` is lower than the stored version for that `id`, and still returns `200`.
-- `payload` is the **public DTO**, never the Forge entity. It never contains member data or internal notes.
+- `payload` is the **public DTO**, never the Forge entity. It never contains user accounts, contact messages or internal notes.
 
 ## Signing
 
