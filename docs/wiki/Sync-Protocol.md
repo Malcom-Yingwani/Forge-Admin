@@ -28,7 +28,7 @@ All endpoints are under `/internal/sync/**`. They aren't exposed through the pub
 }
 ```
 
-- `type` is one of `sermon`, `sermon-series`, `preacher`, `event`, `page`, `person`, `ministry`, `growth-group`, `blog-post`, `document`, `giving-fund`, `service-time`, `site-settings`.
+- `type` is one of `sermon`, `sermon-series`, `preacher`, `event`, `page`, `faq`, `person`, `ministry`, `growth-group`, `blog-post`, `document`, `giving-fund`, `service-time`, `site-settings`.
 - `op` is `UPSERT` or `DELETE`. **Unpublishing is sent as `DELETE`**, because Heritage only stores published content.
 - **Idempotent:** Heritage records every applied `eventId` and returns `200` for duplicates without re-applying them.
 - **Ordering:** Heritage ignores an event whose `version` is lower than the stored version for that `id`, and still returns `200`.

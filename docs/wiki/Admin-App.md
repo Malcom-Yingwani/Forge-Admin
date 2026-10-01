@@ -11,6 +11,7 @@
 | Sermons, Series, Preachers | ADMIN, EDITOR | Table with filters, a 2-column form grid, MP3 upload with progress and preview player, publish toggle |
 | Events | ADMIN, EDITOR | Upcoming and past, recurrence |
 | Pages | ADMIN, EDITOR | Markdown editor with preview (History, 1689 Confession, Potchefstroom, Bible Hour, Do you need a lift?) |
+| FAQs | ADMIN, EDITOR | Question and answer (markdown), publish toggle, drag to reorder |
 | People (Leadership, Office Staff) | ADMIN, EDITOR | Photo upload, ordering, category, public email |
 | Ministries, Growth Groups | ADMIN, EDITOR | Rich description, image, public-contact flag |
 | Blog | ADMIN, EDITOR | Posts with markdown editor, cover image, tags, schedule or publish |

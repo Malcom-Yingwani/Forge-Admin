@@ -10,7 +10,7 @@ za.co.heritagebaptist.forge
 ├── config/     SecurityConfig, CorsConfig, OpenApiConfig, StorageConfig, SchedulingConfig
 ├── common/     BaseEntity, PageResponse, ProblemDetail handler, SlugService, AuditService
 ├── auth/       AppUser, AuthController, JwtService, RefreshTokenService, PasswordResetService
-├── content/    sermon/, series/, preacher/, event/, page/, person/, ministry/, group/, blog/, document/, giving/, servicetime/, settings/
+├── content/    sermon/, series/, preacher/, event/, page/, faq/, person/, ministry/, group/, blog/, document/, giving/, servicetime/, settings/
 ├── media/      MediaAsset, StorageService (LocalDiskStorage | S3Storage), ImageVariants, AudioMetadata
 ├── inbox/      ContactMessage, InboxController (/internal/inbox/**, signed)
 ├── issue/      IssueReport
@@ -31,7 +31,7 @@ POST /api/auth/reset-password    { token, password }
 
 ### Admin (ADMIN, EDITOR)
 ```
-/api/admin/sermons  /sermon-series  /preachers  /events  /pages
+/api/admin/sermons  /sermon-series  /preachers  /events  /pages  /faqs
 /api/admin/people  /ministries  /growth-groups  /blog-posts  /documents  /giving-funds  /service-times
 GET|PUT /api/admin/settings
 POST /api/admin/media (multipart)   GET /api/admin/media   DELETE /api/admin/media/{id}

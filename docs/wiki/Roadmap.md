@@ -44,6 +44,7 @@ Issues: <https://github.com/Malcom-Yingwani/Forge-Admin/issues>
 | #33 | Blog management |
 | #34 | Creeds and Confessions (documents) management |
 | #35 | Giving funds management (ADMIN only) |
+| #36 | FAQs management |
 
 ## Epic #4: Deployment, operations & data privacy
 
@@ -57,7 +58,7 @@ Issues: <https://github.com/Malcom-Yingwani/Forge-Admin/issues>
 
 1. **M1: Skeleton.** #5–#8, #9, #10, #19
 2. **M2: Sermons end-to-end.** #11, #12, #13, #21. A sermon published in Forge plays on the Heritage site, including during a Forge outage
-3. **M3: All website content.** #14, #15, #20, #22–#24, #27–#29, #33–#35
+3. **M3: All website content.** #14, #15, #20, #22–#24, #27–#29, #33–#36
 4. **M4: Production.** #17, #18, #26, #30–#32
 
 _#16 and #25 (member directory) were closed: there's no directory in this project._

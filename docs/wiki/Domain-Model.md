@@ -20,6 +20,7 @@ erDiagram
 | `Sermon` | title, slug, preached_on, service (MORNING/EVENING/BIBLE_HOUR/OTHER), preacher, series, scripture_book (canonical), scripture_ref, summary, audio (MediaAsset), video_url, duration_seconds, published |
 | `Event` | title, slug, starts_at, ends_at, location, description (md), cover, recurrence, published |
 | `Page` | slug, title, body (md), section (ABOUT/RESOURCES/CONTACT/OTHER), sort_order, published. Pages: A Brief History, 1689 Baptist Confession, Potchefstroom Church Plant, Bible Hour, Do you need a lift? |
+| `Faq` | question, answer (md), sort_order, published |
 | `Person` | name, category (LEADERSHIP/OFFICE_STAFF), office (PASTOR/ELDER/DEACON for leadership), role_title (for staff, e.g. Church Administrator), bio, photo, public_email, sort_order, published |
 | `Ministry` | name, slug (growth-groups/young-adults/womens-ministry/mens-ministry), description (md), meeting info, contact, contact_public, image, sort_order, published |
 | `BlogPost` | title, slug, author, excerpt, body (md), cover image, tags, published_at, published |
