@@ -11,7 +11,7 @@ All endpoints are under `/internal/sync/**`. They aren't exposed through the pub
 | `POST` | `/internal/sync/events` | `SyncEvent` (JSON) | Upsert or delete one content entity |
 | `PUT` | `/internal/sync/media/{key}` | raw bytes, `Content-Type`, `X-Content-SHA256` | Mirror one media file |
 | `DELETE` | `/internal/sync/media/{key}` | — | Remove a mirrored file |
-| `POST` | `/internal/sync/snapshot` | `{ "type": "sermon", "items": [ ... ] }` | Full replace of one content type (used by "Resync all") |
+| `POST` | `/internal/sync/snapshot` | `{ "type": "sermon", "chunk": 1, "totalChunks": 3, "items": [ ... ] }` | Full replace of one content type (used by "Resync all"). Up to 500 items per chunk, applied together when the last chunk arrives |
 | `GET` | `/internal/sync/status` | — | Counts and last-applied event per type (shown in Forge Admin) |
 
 ## SyncEvent
@@ -42,6 +42,8 @@ Every request carries:
 X-Forge-Timestamp: 1759304400
 X-Forge-Signature: v1=<hex HMAC-SHA256(secret, timestamp + "." + rawBody)>
 ```
+
+**Media uploads** (`PUT /internal/sync/media/{key}`) stream the file, so the signature covers `timestamp + "." + key + "." + sha256` instead of the body. Heritage checks the received bytes against `X-Content-SHA256` before accepting them.
 
 Heritage rejects a request with `401` if the signature doesn't match or the timestamp is more than 5 minutes away from its own clock. The secret is `SYNC_SHARED_SECRET`, set identically on both sides. To rotate it, Heritage accepts the current *and* the previous secret during the rollover.
 
