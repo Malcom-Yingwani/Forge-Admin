@@ -21,7 +21,7 @@
 | Run it locally | [Local Development](Local-Development.md) |
 | Contribute | [Contributing](Contributing.md) |
 | Deploy | [Deployment](Deployment.md) |
-| Find work | [Roadmap](Roadmap.md) |
+| Find the next task | [Build Order](Roadmap.md) (steps 1–60 across both repos) |
 | Look up a term | [Glossary](Glossary.md) |
 
 ## Roles
