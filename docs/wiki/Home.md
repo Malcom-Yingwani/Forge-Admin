@@ -28,5 +28,5 @@
 
 | Role | Can do |
 |---|---|
-| `ADMIN` | Everything, including users, roles and settings |
-| `EDITOR` | Manage website content: sermons, events, pages, leaders, groups, ministries |
+| `ADMIN` | Everything, including users, settings and giving funds (bank details) |
+| `EDITOR` | Manage website content: sermons, events, pages, people, ministries, blog, creeds & confessions |

@@ -28,7 +28,7 @@ All endpoints are under `/internal/sync/**`. They aren't exposed through the pub
 }
 ```
 
-- `type` is one of `sermon`, `sermon-series`, `preacher`, `event`, `page`, `faq`, `leader`, `growth-group`, `ministry`, `service-time`, `site-settings`.
+- `type` is one of `sermon`, `sermon-series`, `preacher`, `event`, `page`, `person`, `ministry`, `growth-group`, `blog-post`, `document`, `giving-fund`, `service-time`, `site-settings`.
 - `op` is `UPSERT` or `DELETE`. **Unpublishing is sent as `DELETE`**, because Heritage only stores published content.
 - **Idempotent:** Heritage records every applied `eventId` and returns `200` for duplicates without re-applying them.
 - **Ordering:** Heritage ignores an event whose `version` is lower than the stored version for that `id`, and still returns `200`.
@@ -58,9 +58,9 @@ Heritage rejects a request with `401` if the signature doesn't match or the time
 2. Responses: `2xx` = applied or already applied. `4xx` = permanently bad (Forge marks it *dead* and shows it in admin). `5xx` = retry.
 3. heritage-api never calls forge-api to serve a public request.
 
-## Reverse direction: contact messages (Heritage → Forge)
+## Reverse direction: contact messages and lift requests (Heritage → Forge)
 
-`POST forge-api/internal/inbox/contact`. Same signing scheme, with the header prefix `X-Heritage-`. Heritage writes the message to its own outbox and retries the same way until Forge accepts it, then purges its copy after the retention period.
+`POST forge-api/internal/inbox/contact` with `category` = `GENERAL` or `LIFT_REQUEST`. Same signing scheme, with the header prefix `X-Heritage-`. Heritage writes the message to its own outbox and retries the same way until Forge accepts it, then purges its copy after the retention period.
 
 ## Local development
 

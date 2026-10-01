@@ -19,10 +19,12 @@ erDiagram
 | `SermonSeries` | title, slug, description, cover image, start/end date |
 | `Sermon` | title, slug, preached_on, service (MORNING/EVENING/BIBLE_HOUR/OTHER), preacher, series, scripture_book (canonical), scripture_ref, summary, audio (MediaAsset), video_url, duration_seconds, published |
 | `Event` | title, slug, starts_at, ends_at, location, description (md), cover, recurrence, published |
-| `Page` | slug, title, body (md), section (ABOUT/NEW_HERE/MINISTRIES/OTHER), sort_order, published |
-| `Faq` | question, answer (md), sort_order, published |
-| `Leader` | name, office (PASTOR/ELDER/DEACON), bio, photo, sort_order |
-| `Ministry` | name, slug, description, meeting info, wordmark style, sort_order |
+| `Page` | slug, title, body (md), section (ABOUT/RESOURCES/CONTACT/OTHER), sort_order, published. Pages: A Brief History, 1689 Baptist Confession, Potchefstroom Church Plant, Bible Hour, Do you need a lift? |
+| `Person` | name, category (LEADERSHIP/OFFICE_STAFF), office (PASTOR/ELDER/DEACON for leadership), role_title (for staff, e.g. Church Administrator), bio, photo, public_email, sort_order, published |
+| `Ministry` | name, slug (growth-groups/young-adults/womens-ministry/mens-ministry), description (md), meeting info, contact, contact_public, image, sort_order, published |
+| `BlogPost` | title, slug, author, excerpt, body (md), cover image, tags, published_at, published |
+| `Document` | title, slug, category (CREED/CONFESSION/CATECHISM/OTHER), year/origin, summary, body (md, optional), pdf (MediaAsset, optional), sort_order, published |
+| `GivingFund` | name, slug (general/new-church-building-fund/church-planting-fund), description (md), account_name, bank, branch_code, account_number, account_type, payment_reference, snapscan_url, snapscan_qr (MediaAsset), target_amount, raised_amount, show_progress, sort_order, published |
 | `GrowthGroup` | name, area, host, day_of_week, time, contact, contact_public, active |
 | `ServiceTime` | name, day_of_week, time, notes, active |
 | `SiteSettings` (singleton) | church name, address, lat/lng, email, phone, socials, hero headline/image/CTA, footer text |
@@ -34,7 +36,7 @@ erDiagram
 |---|---|
 | `AppUser` | email, password_hash (BCrypt), display_name, role (ADMIN/EDITOR), enabled, last_login_at |
 | `RefreshToken` | user, token_hash, expires_at, revoked |
-| `ContactMessage` | name, email, phone, subject, message, received_at, handled, handled_by |
+| `ContactMessage` | category (GENERAL/LIFT_REQUEST), name, email, phone, subject, message, area (lift), service (lift), received_at, handled, handled_by |
 | `IssueReport` | reporter, category (BUG/CONTENT/DATA/OTHER), description, page_url, user_agent, status |
 | `AuditLog` | actor, action, entity_type, entity_id, at, diff |
 | `SyncOutbox` | event_id, kind (EVENT/MEDIA/SNAPSHOT), type, entity_id, payload, attempts, next_attempt_at, last_error, status (PENDING/SENT/DEAD) |

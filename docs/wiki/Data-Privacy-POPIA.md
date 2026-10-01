@@ -6,11 +6,12 @@ There's **no member directory** on this platform, so the personal data Forge hol
 |---|---|---|
 | Staff accounts | Forge `app_user` | Logging in to Forge Admin |
 | Contact form messages (name, email, optional phone, message) | Heritage briefly, then Forge inbox | Replying to enquiries |
-| Names, photos and bios of pastors, elders and preachers | Public website | Published with the person's agreement |
+| Lift requests (name, phone, area or suburb, service) | Heritage briefly, then Forge inbox | Arranging a lift. Deleted once arranged, or after 3 months |
+| Names, photos, bios and work emails of leaders, office staff and preachers | Public website | Published with the person's agreement |
 
 ## Rules
 
-- **Consent for public people:** get the agreement of every leader or preacher before publishing their photo and bio.
+- **Consent for public people:** get the agreement of every leader, staff member or preacher before publishing their photo and bio.
 - **Contact messages:** use them only to reply. Delete them from Forge 12 months after they're handled, and from Heritage once they're delivered to Forge (30 days at most).
 - **Privacy notice:** a short notice under the contact form and in the site footer.
 - **Security:** TLS everywhere, BCrypt passwords, login lockout, encrypted backups, and no personal data in logs or error reports (scrub Sentry).

@@ -42,10 +42,10 @@ This is the same guarantee the Node MVPs proved, now in Java:
 | Data | Forge (source of truth) | Heritage (read copy) |
 |---|---|---|
 | Sermons, series, preachers | ✔ | ✔ published only |
-| Events, pages, FAQs, leaders, growth groups, ministries, service times, site settings | ✔ | ✔ published only |
+| Events, pages, people (leadership, office staff), ministries, growth groups, blog posts, creeds & confessions, giving funds, service times, site settings | ✔ | ✔ published only |
 | Media files | ✔ | ✔ mirrored |
 | Users, roles, sessions | ✔ | ✘ |
-| Contact messages | ✔ inbox | ✔ stored briefly until delivered to Forge, then purged after N days |
+| Contact messages and lift requests | ✔ inbox | ✔ stored briefly until delivered to Forge, then purged after N days |
 | Issue reports | ✔ | ✘ |
 
 ## Decisions
