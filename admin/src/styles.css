@@ -1,0 +1,4 @@
+body { margin: 0; background: var(--color-light); color: var(--color-dark); font-family: var(--font-body); line-height: 1.6; }
+main { max-width: 60rem; margin: 4rem auto; padding: 2rem; border-top: 3px solid var(--color-primary); }
+h1 { font-family: var(--font-display); }
+:focus-visible { outline: 3px solid var(--color-primary-dark); outline-offset: 3px; }

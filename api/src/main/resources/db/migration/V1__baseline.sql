@@ -1,0 +1,1 @@
+-- Establish Flyway history for this service. Domain tables belong to later roadmap steps.
