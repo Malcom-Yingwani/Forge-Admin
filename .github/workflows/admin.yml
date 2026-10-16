@@ -1,0 +1,45 @@
+name: admin
+on:
+  pull_request:
+    paths: ['admin/**', '.github/workflows/admin.yml', 'shared/**']
+  push:
+    branches: [main]
+    paths: ['admin/**', '.github/workflows/admin.yml', 'shared/**']
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  admin:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: admin
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: admin/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+  brand-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Compare shared brand tokens when accessible
+        shell: bash
+        run: |
+          # Heritage is private; the default Forge token cannot read its files.
+          # Skip with a notice when unauthenticated access is unavailable.
+          if curl --fail --silent --show-error --location https://raw.githubusercontent.com/Malcom-Yingwani/Heritage-Website/main/shared/brand.css -o /tmp/heritage-brand.css; then
+            if ! diff -u /tmp/heritage-brand.css shared/brand.css; then
+              echo "::warning::Brand tokens differ from Heritage main"
+            fi
+          else
+            echo "::notice::Skipping brand comparison: Heritage's private file is unavailable to this token"
+          fi

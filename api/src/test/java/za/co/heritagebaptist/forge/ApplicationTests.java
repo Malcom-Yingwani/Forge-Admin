@@ -9,6 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.utility.DockerImageName;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,12 +21,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("dev")
+@ActiveProfiles({"dev", "test"})
 @Testcontainers
 class ApplicationTests {
     @Container
     @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16");
+
+    @Container
+    static GenericContainer<?> mail = new GenericContainer<>(DockerImageName.parse("axllent/mailpit:v1.27"))
+        .withExposedPorts(1025);
+
+    @DynamicPropertySource
+    static void mailProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.mail.host", mail::getHost);
+        registry.add("spring.mail.port", () -> mail.getMappedPort(1025));
+    }
 
     @Autowired MockMvc mvc;
     @Autowired JdbcTemplate jdbc;
@@ -35,9 +49,8 @@ class ApplicationTests {
     }
 
     @Test
-    void openApiAvailableInDevelopment() throws Exception {
-        mvc.perform(get("/v3/api-docs")).andExpect(status().isOk())
-            .andExpect(jsonPath("$.openapi").exists());
+    void documentationRemainsDeniedUntilAuthenticationIsImplemented() throws Exception {
+        mvc.perform(get("/v3/api-docs")).andExpect(status().isForbidden());
     }
 
     @Test

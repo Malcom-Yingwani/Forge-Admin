@@ -1,0 +1,9 @@
+# Testcontainers @ServiceConnection supplies database connection details.
+spring:
+  mail:
+    host: localhost
+    port: 1025
+  flyway:
+    locations: classpath:db/migration
+app:
+  cors-origins: http://localhost:5174

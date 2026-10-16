@@ -15,8 +15,10 @@ dist/
 !.env.example
 
 # Local data
-media/
-uploads/
+/media/
+/api/media/
+/uploads/
+/api/uploads/
 
 # IDE / OS
 .idea/

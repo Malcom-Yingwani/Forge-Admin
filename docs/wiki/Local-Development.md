@@ -2,24 +2,22 @@
 
 ## Prerequisites
 
-- Full JDK 21 (including `javac`), preferably Temurin. A Java runtime alone cannot compile the API.
-- Node 24 LTS, pinned in `.nvmrc`; Node 22.12+ is supported.
-- Docker Engine and Docker Compose v2, with a working daemon. API tests use real PostgreSQL through Testcontainers.
-- Maven is supplied by `api/mvnw` / `api/mvnw.cmd`, pinned to 3.9.16 with distribution checksum verification.
+- Full JDK 21 (including `javac`), preferably Temurin. `api/mvnw` supplies checksum-verified Maven 3.9.16.
+- Node 22.12+; `.nvmrc` selects Node 24 LTS locally and CI uses Node 22.
+- Docker Engine with a working daemon and Compose v2. Tests start their own PostgreSQL 16 and Mailpit containers.
+- Go 1.24+ (a genuine Go toolchain, not the GNU Go game), curl, tar, sha256sum and Linux CA certificates for the local MinIO/mc source builds.
 
-## First setup
+## Install and start
 
-From the repository root, run `./scripts/setup.sh`. It installs frontend dependencies with `npm ci`, validates Compose, and runs the API tests and package build. No real credentials or external services are needed. It leaves existing environment files unchanged.
-
-The API uses Java 21 and Spring Boot 3.5.16, PostgreSQL 17, JPA, Flyway, validation, Spring Security, Actuator, and springdoc. The frontend uses React, TypeScript, and Vite. Both repositories carry identical `brand.css` tokens; update both copies together.
-
-## Run
-
-Run the infrastructure from the repository root:
+From the repository root:
 
 ```bash
-docker compose up -d --wait
+./scripts/setup.sh
+docker compose up -d
+docker compose wait minio-init
 ```
+
+Setup uses `npm ci`, validates Compose, and runs `./mvnw verify`. It preserves existing environment files. Forge builds pinned local MinIO and mc images when absent; module checksums and source archive checksums remain enabled. The one-shot init service creates `forge-media` idempotently.
 
 In separate terminals, from the repository root:
 
@@ -32,70 +30,56 @@ cd admin
 npm run dev
 ```
 
-The API runs on port 8081; the frontend runs on 5174 with strict port checking. Services bind to loopback by default. No login or content UI is implemented yet.
+| Service | Local port |
+|---|---|
+| API | 8081 |
+| Frontend | 5174 |
+| PostgreSQL | 5433 |
+| Mailpit SMTP / UI | 1026 / 8026 |
+| MinIO S3 / console | 9000 / 9001 |
 
-| Service | Local port | Purpose |
-|---|---|---|
-| PostgreSQL | 5433 | Separate `forge` database and persistent named volume |
-| Mailpit SMTP | 1026 | Local mail capture for later mail features |
-| Mailpit UI | 8026 | Inspect local messages |
-
-Forge and Heritage can run together without port collisions. Neither API needs the other to start.
+Development ports bind to loopback, with strict frontend port checking. Both stacks run simultaneously without port collisions. Each database has its own persistent `pgdata` volume and db/user/password `forge` (local examples only). The frontend contains title-only route placeholders, not real screens.
 
 ## Configuration
 
-Defaults in `application-dev.yml` match Compose and are **local development only**. Base configuration requires explicit database credentials, leaves API documentation disabled, and denies application routes until their security is implemented. Health is public; Swagger and OpenAPI are available in the `dev` profile only. There is no seeded admin or content yet.
+Optionally copy `.env.example` to `.env`, and `admin/.env.example` to `admin/.env`, only if those files do not already exist. The API helper exports the root `.env`; Compose reads it too. A manual Java/Maven command does not load `.env` automatically. Vite reads the frontend file.
 
-Optional overrides:
+Base configuration reads settings from environment variables; the `dev` profile supplies documented local values and includes `db/dev` for later seed migrations. There are no seeded users or content. Set production credentials securely; never reuse the local examples. `POSTGRES_PASSWORD` and `DB_PASSWORD` must agree. Initialization settings only affect a fresh volume and do not rotate an existing database password.
 
-```bash
-# Run only when these files do not already exist.
-cp .env.example .env
-cp admin/.env.example admin/.env
-```
+Forge temporarily denies all requests except GET health endpoints until the auth task replaces this policy. Swagger remains denied even in dev.
 
-`run-api.sh` loads the root `.env`; Compose also reads it. A manually invoked Maven or Java process does not automatically load it. Vite loads `admin/.env`. `VITE_API_URL` reserves the API base URL for future client requests; the placeholder page makes no API calls.
+The API client scaffold uses `VITE_API_URL`; requests include cookies and an in-memory access token, time out after 30s, and refresh/retry once after a 401. This is a client stub, not a login implementation.
 
-When changing database credentials, keep `POSTGRES_PASSWORD` and `DB_PASSWORD` aligned. PostgreSQL initialization variables apply only to a fresh volume: changing them does not rotate an existing database password. Never use the sample values in production. Mail settings are reserved for the later mail implementation.
+`shared/brand.css` must remain byte-for-byte identical across the repos. Vite aliases `@brand` to it. Global styles use its tokens and Google Fonts; the temporary geometric favicon is not a church-logo recreation.
 
-## Readiness and checks
+## Checks
 
 ```bash
 curl --fail http://127.0.0.1:8081/actuator/health
-curl --fail http://127.0.0.1:8081/v3/api-docs
 cd api && ./mvnw --batch-mode --no-transfer-progress verify
 ```
 
-The health response must have `status: UP`, including a working database connection. API tests run against an isolated PostgreSQL container and verify Flyway baseline history, health, OpenAPI, denial of unimplemented routes, and allowed/rejected CORS origins. They fail if Docker or the database is unavailable; they are not silently skipped. The baseline migration deliberately creates no domain tables; those belong to later roadmap steps.
+Health must report `UP`, including database and mail connectivity. API tests use isolated PostgreSQL and Mailpit containers and are not skipped without Docker. Flyway establishes version 1 without creating domain tables; JPA validates rather than generating schema.
 
-From the repository root:
+From the root:
 
 ```bash
 cd admin
 npm run lint
+npm test
 npm run build
 ```
 
-CI runs the same API and frontend checks, plus Compose validation on pull requests and pushes to `main`. GitHub-hosted runners supply Docker for Testcontainers. The workflow has read-only repository permissions.
+Lint uses oxlint and ESLint. Vitest mocks fetch to test the API client; real auth/content endpoints remain out of scope. All site-map/screen routes render only their titles, with a 404 fallback. Google Fonts may require working Internet access; local fallbacks remain available.
+
+Build the non-root API image from the root with `docker build -t forge-api api/`. In the Codex cloud, source `/workspace/.tools/activate.sh`; for image builds requiring the supplied egress proxy, pass BuildKit secrets `--secret id=maven_settings,src=/workspace/.cache/maven/settings.xml --secret id=java_truststore,src=/etc/ssl/certs/java/cacerts`. These mounts are not retained in image layers. API images bind to all container interfaces; the host application defaults to loopback.
+
+The independent `api.yml` and `admin.yml` CI workflows filter paths and run verification on PRs and pushes to main; API failures upload Surefire reports. The repo owner configures main protection and required `api` / `admin` checks after they exist.
 
 ## Stop and restart
 
-Stop frontend and API terminal processes with Ctrl+C. From the root, `docker compose stop` retains data; `docker compose up -d --wait` restarts services. `docker compose down` removes containers and networking but retains named volumes. Avoid `down --volumes` unless you intend to delete all local data.
+Stop API/frontend terminals with Ctrl+C. `docker compose stop` and `docker compose up -d` retain data; `docker compose down` retains named volumes. Do not use `down --volumes` unless deleting local data intentionally. Older scaffold `postgres-data` volumes are preserved separately when switching to the issue-required PostgreSQL 16 `pgdata` volumes.
 
-## Running both repositories
+## MinIO maintenance
 
-Use their existing sibling checkouts. The future sync sender/receiver, HMAC secrets, content models, auth, and media features are not implemented by the scaffold. Do not supply production secrets or claim sync/outage tests pass yet. Once those roadmap tasks land, configure the same `SYNC_SHARED_SECRET` on both APIs and the documented sync endpoints.
-
-## Optional local S3 service
-
-The default scaffold uses no object storage. Later media work can choose local disk or S3 as documented in the architecture. MinIO is behind the `s3` Compose profile so its build is not required for API/frontend work.
-
-MinIO community edition is archived and now source-only; former public container images are unavailable. The helper builds release `RELEASE.2025-09-07T16-13-09Z` from its upstream source archive, checks its pinned SHA-256, preserves Go module checksum verification, and builds a local static container. It requires a real Go 1.24+ toolchain, curl, tar, sha256sum, Linux CA certificates, and Docker. Build parallelism defaults to four workers. It is a local compatibility service, not a production storage recommendation.
-
-```bash
-./scripts/build-minio.sh
-docker compose --profile s3 up -d --wait
-curl --fail http://127.0.0.1:9000/minio/health/live
-```
-
-The S3 API is on 9000, the console on 9001, both loopback-only, with the sample local credentials in `.env.example`. The helper image persists; its container must be restarted after a cloud snapshot. `docker compose --profile s3 down` removes this optional container as well.
+MinIO community edition is archived and source-only; its former community container images are unavailable. `scripts/build-minio.sh` builds the pinned upstream releases for server and mc with four workers, checks source archive SHA-256 values and preserves Go module verification. It is a local compatibility service, not a production storage recommendation. The init service uses local sample credentials `forge` / `forge-secret` and creates `forge-media` safely on repeated starts. Check readiness with `curl --fail http://127.0.0.1:9000/minio/health/live`.

@@ -2,7 +2,12 @@ spring:
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5433/forge}
     username: ${DB_USER:forge}
-    password: ${DB_PASSWORD:forge-dev-only}
+    password: ${DB_PASSWORD:forge}
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1026}
+  flyway:
+    locations: classpath:db/migration,classpath:db/dev
 springdoc:
   api-docs:
     enabled: true
@@ -10,3 +15,15 @@ springdoc:
     enabled: true
 app:
   cors-origins: ${CORS_ORIGINS:http://localhost:5174}
+  sync-shared-secret: ${SYNC_SHARED_SECRET:dev-secret-change-me}
+  media-dir: ${MEDIA_DIR:./media}
+  heritage-sync-url: ${HERITAGE_SYNC_URL:http://localhost:8080/internal/sync}
+  jwt-secret: ${JWT_SECRET:local-development-only-not-for-production-32bytes}
+  admin-email: ${ADMIN_EMAIL:admin@heritage.local}
+  admin-password: ${ADMIN_PASSWORD:change-me}
+  media-storage: ${MEDIA_STORAGE:s3}
+  media-s3-endpoint: ${MEDIA_S3_ENDPOINT:http://localhost:9000}
+  media-s3-bucket: ${MEDIA_S3_BUCKET:forge-media}
+  media-s3-region: ${MEDIA_S3_REGION:us-east-1}
+  media-s3-access-key: ${MEDIA_S3_ACCESS_KEY:forge}
+  media-s3-secret-key: ${MEDIA_S3_SECRET_KEY:forge-secret}

@@ -19,8 +19,6 @@ The project wiki lives in [`docs/wiki/`](docs/wiki/Home.md):
 
 To publish these pages to the GitHub Wiki tab, run `scripts/publish-wiki.sh`.
 
-See the [foundation setup report](docs/SETUP-REPORT.md) for implementation decisions, validation, and remaining prerequisites.
-
 ## Status
 
 Foundation scaffolds are implemented: local PostgreSQL/Mailpit infrastructure, a minimal Spring Boot API, a React/TypeScript frontend with brand tokens, and CI. Content, authentication, media, and sync features remain planned. See [Local Development](docs/wiki/Local-Development.md) for tested setup and run commands.
