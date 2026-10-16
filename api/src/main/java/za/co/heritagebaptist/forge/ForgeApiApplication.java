@@ -12,3 +12,4 @@ public class ForgeApiApplication {
         SpringApplication.run(ForgeApiApplication.class, args);
     }
 }
+// Temporary setup path-filter acceptance probe.
