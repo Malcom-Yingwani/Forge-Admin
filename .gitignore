@@ -15,11 +15,16 @@ dist/
 !.env.example
 
 # Local data
-media/
-uploads/
+/media/
+/api/media/
+/uploads/
+/api/uploads/
 
 # IDE / OS
 .idea/
 *.iml
 .vscode/
 .DS_Store
+
+# TypeScript build metadata
+*.tsbuildinfo

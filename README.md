@@ -21,6 +21,8 @@ To publish these pages to the GitHub Wiki tab, run `scripts/publish-wiki.sh`.
 
 ## Status
 
-Planning. The work is tracked in the [issues](https://github.com/Malcom-Yingwani/forge-admin/issues), grouped under epics.
+Foundation scaffolds are implemented: local PostgreSQL/Mailpit infrastructure, a minimal Spring Boot API, a React/TypeScript frontend with brand tokens, and CI. Content, authentication, media, and sync features remain planned. See [Local Development](docs/wiki/Local-Development.md) for tested setup and run commands.
+
+The remaining work is tracked in the [issues](https://github.com/Malcom-Yingwani/forge-admin/issues), grouped under epics.
 
 > This repository is public. Never commit personal data, real credentials or secrets. See [Data Privacy (POPIA)](docs/wiki/Data-Privacy-POPIA.md).
