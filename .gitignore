@@ -28,3 +28,6 @@ dist/
 
 # TypeScript build metadata
 *.tsbuildinfo
+
+# Local process state and logs
+.local/
