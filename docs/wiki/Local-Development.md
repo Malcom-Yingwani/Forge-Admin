@@ -4,7 +4,7 @@
 
 - Full JDK 21 (including `javac`), preferably Temurin. `api/mvnw` supplies checksum-verified Maven 3.9.16.
 - Node 22.12+; `.nvmrc` selects Node 24 LTS locally and CI uses Node 22.
-- Docker Engine with a working daemon and Compose v2. Tests start their own PostgreSQL 16 and Mailpit containers.
+- Docker Desktop with WSL integration enabled for your Ubuntu distro and Compose v2. Do not install a competing Linux daemon. Tests start their own PostgreSQL 16 and Mailpit containers.
 - Go 1.24+ (a genuine Go toolchain, not the GNU Go game), curl, tar, sha256sum and Linux CA certificates for the local MinIO/mc source builds.
 
 ## Install and start
@@ -13,8 +13,7 @@ From the repository root:
 
 ```bash
 ./scripts/setup.sh
-docker compose up -d
-docker compose wait minio-init
+./scripts/dev.sh up
 ```
 
 Setup uses `npm ci`, validates Compose, and runs `./mvnw verify`. It preserves existing environment files. Forge builds pinned local MinIO and mc images when absent; module checksums and source archive checksums remain enabled. The one-shot init service creates `forge-media` idempotently.
@@ -22,12 +21,11 @@ Setup uses `npm ci`, validates Compose, and runs `./mvnw verify`. It preserves e
 In separate terminals, from the repository root:
 
 ```bash
-./scripts/run-api.sh
+./scripts/dev.sh api
 ```
 
 ```bash
-cd admin
-npm run dev
+./scripts/dev.sh admin
 ```
 
 | Service | Local port |
@@ -78,8 +76,46 @@ The independent `api.yml` and `admin.yml` CI workflows filter paths and run veri
 
 ## Stop and restart
 
-Stop API/frontend terminals with Ctrl+C. `docker compose stop` and `docker compose up -d` retain data; `docker compose down` retains named volumes. Do not use `down --volumes` unless deleting local data intentionally. Older scaffold `postgres-data` volumes are preserved separately when switching to the issue-required PostgreSQL 16 `pgdata` volumes.
+Stop API/frontend terminals with Ctrl+C. App output is also appended to ignored `.local/logs/api.log` and `.local/logs/admin.log`. Restart with `./scripts/dev.sh api` and `./scripts/dev.sh admin`. Use `./scripts/dev.sh status` to inspect infrastructure and `./scripts/dev.sh stop` to stop only Forge containers. `docker compose stop` and `docker compose up -d` retain data; `docker compose down` retains named volumes. Do not use `down --volumes` unless deleting local data intentionally. Older scaffold `postgres-data` volumes are preserved separately when switching to the issue-required PostgreSQL 16 `pgdata` volumes.
 
 ## MinIO maintenance
 
 MinIO community edition is archived and source-only; its former community container images are unavailable. `scripts/build-minio.sh` builds the pinned upstream releases for server and mc with four workers, checks source archive SHA-256 values and preserves Go module verification. It is a local compatibility service, not a production storage recommendation. The init service uses local sample credentials `forge` / `forge-secret` and creates `forge-media` safely on repeated starts. Check readiness with `curl --fail http://127.0.0.1:9000/minio/health/live`.
+
+## Windows / WSL setup
+
+Run commands in WSL, as your normal user, from the repository root. Install missing system packages using Ubuntu's signed repositories:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y openjdk-21-jdk curl unzip ca-certificates
+# If needed, Ubuntu's golang-go package must supply Go 1.24 or later.
+# Alternatively install an official https://go.dev/dl/ Linux archive in your
+# user directory after checking its SHA-256 against the official metadata.
+source "$HOME/.nvm/nvm.sh"
+nvm install
+nvm use
+./scripts/check-prerequisites.sh
+```
+
+Use the existing nvm installation; never run npm or project scripts with sudo. For a new nvm installation, follow the official https://github.com/nvm-sh/nvm instructions. Keep TLS validation enabled for all downloads. The Maven wrapper, MinIO archives, and Go modules already retain checksum verification. `setup.sh` installs locked npm dependencies, builds missing MinIO images, and verifies the API. `./scripts/verify.sh` repeats Maven verification plus frontend lint, tests, and production build.
+
+Docker Desktop must be running on Windows. In Settings → Resources → WSL Integration, enable this distro. `docker info` should identify Docker Desktop and `docker compose version` should succeed. A sandboxed agent may need approval to access the Docker socket; that does not imply Docker needs reinstalling.
+
+## Port conflicts and local overrides
+
+`dev.sh up` checks infrastructure ports before starting containers and reports conflicts without stopping other services. It also accepts containers already owned by this Compose project. Preserve Heritage's PostgreSQL mapping at **15432**. Forge defaults to **5433** and its other defaults are separate from Heritage. Check Windows listeners too if Docker reports a bind failure (`Get-NetTCPConnection -State Listen` in PowerShell).
+
+Keep local overrides in the ignored root `.env`; edit only needed values and preserve existing files. Supported host port settings are `POSTGRES_PORT`, `MAIL_PORT`, `MAIL_UI_PORT`, `MINIO_PORT`, and `MINIO_CONSOLE_PORT`. `PORT` changes the API port and `ADMIN_PORT` changes the frontend port. For example, to use PostgreSQL 5434, add `POSTGRES_PORT=5434`. The API helper derives `DB_URL` from this port unless an explicit `DB_URL` is already set; update an existing URL to match. Similarly it derives the S3 endpoint from `MINIO_PORT` and CORS origin from `ADMIN_PORT` unless explicitly configured. When `PORT` is set, the frontend helper defaults `VITE_API_URL` to that API port. Otherwise Vite retains its own environment configuration. Explicit root environment values take precedence over Vite environment files, so update any existing URLs consistently. Restart the apps after changes. Windows CRLF environment files are supported by the shell helpers.
+
+Do not commit `.env`, local tools, logs, build outputs, or credentials. `dev.sh up` requires the local MinIO images produced by setup. Run `./scripts/smoke.sh` after both apps start to check infrastructure, migrations, API health, frontend HTML, and expected protected-route 403 responses. It does not substitute for a browser rendering check. Bucket initialization must exit zero; inspect it with `docker compose logs minio-init`. Check the bucket without exposing credentials:
+
+```bash
+docker compose run --rm --no-deps --entrypoint /bin/sh minio-init -ec \
+  'mc alias set local http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD" >/dev/null && mc stat local/forge-media'
+curl --fail http://localhost:8081/actuator/health
+curl --fail http://localhost:8026/api/v1/info
+curl --fail http://localhost:9000/minio/health/live
+```
+
+The public API health response intentionally summarizes status. Maven integration tests additionally query PostgreSQL's migration history. Protected routes and Swagger return **403** by design; there is no working login yet. Open http://localhost:5174 on Windows to see the title-only scaffold. MinIO's console is http://localhost:9001 and Mailpit is http://localhost:8026.
