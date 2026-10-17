@@ -24,6 +24,9 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ProblemDetail missingRoute() { return problem(HttpStatus.NOT_FOUND, "Resource not found"); }
+
     @ExceptionHandler(NotFoundException.class)
     public ProblemDetail notFound(NotFoundException exception) {
         return problem(HttpStatus.NOT_FOUND, exception.getMessage());

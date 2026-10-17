@@ -13,9 +13,9 @@ curl --fail --silent --show-error --retry 30 --retry-connrefused --retry-delay 1
 [[ $(docker compose exec -T postgres psql -U forge -d forge -Atc "select count(*) from flyway_schema_history where success and version = '1'") == 1 ]]
 echo 'Database: migration 1 applied'
 for path in /api/admin/users; do
-  [[ $(curl --silent --show-error --max-time 5 -o /dev/null -w '%{http_code}' "$api$path") == 403 ]]
+  [[ $(curl --silent --show-error --max-time 5 -o /dev/null -w '%{http_code}' "$api$path") == 401 ]]
 done
-echo 'Protected routes: expected 403'
+echo 'Protected routes: expected 401'
 if [[ "${OPENAPI_ENABLED:-true}" == true ]]; then
   curl --fail --silent --show-error --max-time 10 "$api/v3/api-docs" >/dev/null
   curl --fail --silent --show-error --max-time 10 "$api/swagger-ui/index.html" >/dev/null

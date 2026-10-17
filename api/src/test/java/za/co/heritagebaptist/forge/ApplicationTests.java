@@ -20,7 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@org.springframework.test.annotation.DirtiesContext(classMode = org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS)
+@AutoConfigureMockMvc(print = org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint.NONE)
 @ActiveProfiles({"dev", "test"})
 @Testcontainers
 class ApplicationTests {
@@ -55,11 +56,11 @@ class ApplicationTests {
     }
 
     @Test
-    void applicationRoutesAreDeniedUntilTheirSecurityIsImplemented() throws Exception {
-        mvc.perform(get("/api/admin/users").header("X-Request-Id", "test-forbidden")).andExpect(status().isForbidden())
+    void applicationRoutesRequireAuthentication() throws Exception {
+        mvc.perform(get("/api/admin/users").header("X-Request-Id", "test-forbidden")).andExpect(status().isUnauthorized())
             .andExpect(header().string("X-Request-Id", "test-forbidden"));
         mvc.perform(post("/internal/sync").contentType("application/json").content("{}"))
-            .andExpect(status().isForbidden());
+            .andExpect(status().isNotFound());
     }
 
     @Test
