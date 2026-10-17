@@ -31,3 +31,7 @@ dist/
 
 # Local process state and logs
 .local/
+
+# Browser test output
+/admin/test-results/
+/admin/playwright-report/

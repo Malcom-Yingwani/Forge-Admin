@@ -54,7 +54,7 @@ export function FormField({ label, name, value, onChange, type = 'text', errors 
   const id = useId(), messages = errors.filter(error => error.field === name)
   const described = [hint ? `${id}-hint` : '', messages.length ? `${id}-error` : ''].filter(Boolean).join(' ') || undefined
   const common = { id, name, required, disabled, 'aria-invalid': messages.length > 0, 'aria-describedby': described, className: 'form-control' }
-  return <div className="form-field"><label className="form-label" htmlFor={id}>{label}{required ? ' *' : ''}</label>
+  return <div className="form-field"><label className="form-label" htmlFor={id}>{label}{required && <span aria-hidden="true"> *</span>}</label>
     {type === 'textarea' ? <textarea {...common} minLength={minLength} maxLength={maxLength} value={String(value)} onChange={e => onChange(e.target.value)} /> :
       type === 'select' ? <select {...common} value={String(value)} onChange={e => onChange(e.target.value)}>{options?.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select> :
       type === 'checkbox' ? <input {...common} type="checkbox" checked={Boolean(value)} onChange={e => onChange(String(e.target.checked))} /> :
