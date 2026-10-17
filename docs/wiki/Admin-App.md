@@ -30,3 +30,9 @@ Toast stack, lightbox, modal (dark header with Mustard border), confirm dialog, 
 ## Auth flow
 
 The access token is kept **in memory**, and the refresh token in an httpOnly `Secure` `SameSite=Strict` cookie. On a 401 the app calls `/api/auth/refresh` once and retries the request, and if that fails it sends you to login. Routes are guarded by role, and **the server enforces every rule regardless of the UI**.
+
+## Shared UI components
+
+`admin/src/components` contains the shared table, form fields, markdown editor, modal, confirmation, image preview, cards, empty state and publishing control. Wrap the application in `ToastProvider` and `ConfirmProvider`; use `useToast()` for messages and `await useConfirm()({...})` for confirmation. Field errors accept the API's `{field, message}` entries. Markdown is sanitized with DOMPurify before rendering.
+
+The `/dev/components` gallery is available only in development and runs axe. Production builds exclude the gallery. Tests cover keyboard focus trapping and restoration, Escape, confirmation results, toast dismissal, API field errors, markdown sanitization, and gallery accessibility. The image picker currently accepts an existing asset ID; media upload follows in the media issue.
