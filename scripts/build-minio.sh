@@ -19,6 +19,7 @@ tar -xzf "$build_dir/source.tar.gz" --strip-components=1 -C "$build_dir/source"
 cp /etc/ssl/certs/ca-certificates.crt "$build_dir/image/ca-certificates.crt"
 cp "$root/infra/minio/Dockerfile" "$build_dir/image/Dockerfile"
 docker build --tag forge-minio:RELEASE.2025-09-07T16-13-09Z "$build_dir/image"
+if [[ "${1:-all}" == server-only ]]; then exit 0; fi
 
 curl --fail --silent --show-error --location \
   https://codeload.github.com/minio/mc/tar.gz/refs/tags/RELEASE.2025-08-13T08-35-41Z \
