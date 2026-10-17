@@ -69,3 +69,11 @@ RFC 7807 `ProblemDetail`. Validation errors include `errors: [{ field, message }
 | `HERITAGE_SYNC_URL`, `SYNC_SHARED_SECRET` | Push to Heritage |
 | `CORS_ORIGINS` | `http://localhost:5174` in dev |
 | `MAIL_*` | Password resets, notifications |
+
+## Staff authentication
+
+Access tokens are HS256 JWTs with a 15-minute lifetime. `JWT_SECRET` must contain at least 32 UTF-8 bytes. Refresh tokens are random 256-bit values stored only as SHA-256 hashes. The httpOnly `refresh_token` cookie is scoped to `/api/auth`, lasts seven days, and rotates on every refresh. Reuse of a revoked token commits revocation of every session for that staff account. Concurrent refreshes are serialized using a per-user database lock; clients should share one refresh request.
+
+`REFRESH_COOKIE_SECURE` defaults to true (false in the dev profile). Set `PASSWORD_RESET_URL` to the admin reset page, and `MAIL_FROM` to your sender address. Reset links expire after one hour, work once, and revoke refresh sessions. New passwords must contain 12–72 characters. Profile changes require `currentPassword`. Bootstrap creates the first enabled ADMIN only when the user table is empty and both bootstrap environment values are supplied; remove those values after first production startup.
+
+Failed logins are limited to five per normalized email and twenty per remote IP in fifteen minutes. A blocked request returns 429 and `Retry-After`. The limiter is local to each API instance. Requests do not trust forwarded IP headers. CORS allows credentials only from configured origins. Internal routes are reserved for the separately implemented HMAC endpoints.

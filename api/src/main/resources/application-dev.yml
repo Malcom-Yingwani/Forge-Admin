@@ -27,3 +27,6 @@ app:
   media-s3-region: ${MEDIA_S3_REGION:us-east-1}
   media-s3-access-key: ${MEDIA_S3_ACCESS_KEY:forge}
   media-s3-secret-key: ${MEDIA_S3_SECRET_KEY:forge-secret}
+  refresh-cookie-secure: ${REFRESH_COOKIE_SECURE:false}
+  password-reset-url: ${PASSWORD_RESET_URL:http://localhost:5174/reset-password}
+  mail-from: ${MAIL_FROM:forge@heritage.local}
