@@ -36,3 +36,9 @@ The access token is kept **in memory**, and the refresh token in an httpOnly `Se
 `admin/src/components` contains the shared table, form fields, markdown editor, modal, confirmation, image preview, cards, empty state and publishing control. Wrap the application in `ToastProvider` and `ConfirmProvider`; use `useToast()` for messages and `await useConfirm()({...})` for confirmation. Field errors accept the API's `{field, message}` entries. Markdown is sanitized with DOMPurify before rendering.
 
 The `/dev/components` gallery is available only in development and runs axe. Production builds exclude the gallery. Tests cover keyboard focus trapping and restoration, Escape, confirmation results, toast dismissal, API field errors, markdown sanitization, and gallery accessibility. The image picker currently accepts an existing asset ID; media upload follows in the media issue.
+
+## Staff login and shell
+
+The login, forgot/reset password, account, role guard, navigation shell and logout flow are implemented. Tokens stay in memory; the httpOnly cookie restores the session after reload. Startup and 401 recovery share one refresh request so React StrictMode does not rotate the cookie twice. Login failures never trigger refresh. Reset links are removed from the browser URL after use, and return URLs are restricted to local routes.
+
+`npm run test:e2e` runs Chromium smoke tests for sign in, reload, logout, editor restrictions and invalid credentials using a controlled API fixture. The API's authentication integration tests independently cover the real server. CI runs both frontend unit and browser tests. The report-issue dialog and dashboard remain placeholders until their own issues.

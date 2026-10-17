@@ -60,4 +60,13 @@ describe('API client scaffold', () => {
     await expect(get('/api/admin/example')).rejects.toThrow('Session refresh failed')
     expect(fetch).toHaveBeenCalledTimes(2)
   })
+  it('does not refresh when a login fails and accepts empty 202 responses', async () => {
+    const fetch = vi.fn().mockResolvedValueOnce(new Response('{"detail":"Invalid credentials"}', { status: 401 }))
+      .mockResolvedValueOnce(new Response(null, { status: 202 }))
+    vi.stubGlobal('fetch', fetch)
+    await expect(post('/api/auth/login', { email: 'staff@example.test', password: 'wrong' })).rejects.toMatchObject({ status: 401 })
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(await post('/api/auth/forgot-password', { email: 'unknown@example.test' })).toBeNull()
+  })
+
 })
