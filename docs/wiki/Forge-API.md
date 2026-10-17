@@ -77,3 +77,9 @@ Access tokens are HS256 JWTs with a 15-minute lifetime. `JWT_SECRET` must contai
 `REFRESH_COOKIE_SECURE` defaults to true (false in the dev profile). Set `PASSWORD_RESET_URL` to the admin reset page, and `MAIL_FROM` to your sender address. Reset links expire after one hour, work once, and revoke refresh sessions. New passwords must contain 12–72 characters. Profile changes require `currentPassword`. Bootstrap creates the first enabled ADMIN only when the user table is empty and both bootstrap environment values are supplied; remove those values after first production startup.
 
 Failed logins are limited to five per normalized email and twenty per remote IP in fifteen minutes. A blocked request returns 429 and `Retry-After`. The limiter is local to each API instance. Requests do not trust forwarded IP headers. CORS allows credentials only from configured origins. Internal routes are reserved for the separately implemented HMAC endpoints.
+
+## Content administration
+
+All fourteen content types now have typed request/admin/public records, mappers, transactional services and controllers. Collection routes support search, validated sorting and paging; updates require the current `version` and return 409 on conflicts. Publishing, hiding and supported reordering routes audit every write and call `SyncHook`. Its default implementation is intentionally a no-op until the sync sender is installed.
+
+Giving-fund writes require ADMIN at the service layer; editors can read. Documents require text or a PDF, and publishing a person requires recorded consent. Public records omit private consent fields and mask non-public ministry/group contacts. Site settings are a singleton created with public defaults on first read. Blog publication dates can be scheduled; a persistent queue emits the change when due and survives process restarts.
