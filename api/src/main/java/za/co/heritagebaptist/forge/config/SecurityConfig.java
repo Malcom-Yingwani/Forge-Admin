@@ -14,7 +14,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, @Value("${springdoc.api-docs.enabled:false}") boolean openApiEnabled) throws Exception {
         http.cors(cors -> {})
             .csrf(csrf -> csrf.disable())
             .formLogin(form -> form.disable())
@@ -23,6 +23,9 @@ public class SecurityConfig {
                 org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers(HttpMethod.GET, "/actuator/health", "/actuator/health/**").permitAll();
+                if (openApiEnabled) {
+                    auth.requestMatchers(HttpMethod.GET, "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
+                }
                 auth.anyRequest().denyAll();
             });
         return http.build();
@@ -33,7 +36,8 @@ public class SecurityConfig {
         var cors = new CorsConfiguration();
         cors.setAllowedOrigins(origins);
         cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        cors.setAllowedHeaders(List.of("Content-Type", "Authorization", "X-CSRF-TOKEN"));
+        cors.setAllowedHeaders(List.of("Content-Type", "Authorization", "X-CSRF-TOKEN", "X-Request-Id"));
+        cors.setExposedHeaders(List.of("X-Request-Id"));
         cors.setAllowCredentials(true);
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cors);

@@ -10,9 +10,9 @@ spring:
     locations: classpath:db/migration,classpath:db/dev
 springdoc:
   api-docs:
-    enabled: true
+    enabled: ${OPENAPI_ENABLED:true}
   swagger-ui:
-    enabled: true
+    enabled: ${OPENAPI_ENABLED:true}
 app:
   cors-origins: ${CORS_ORIGINS:http://localhost:5174}
   sync-shared-secret: ${SYNC_SHARED_SECRET:dev-secret-change-me}

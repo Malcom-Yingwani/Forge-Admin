@@ -44,7 +44,7 @@ Optionally copy `.env.example` to `.env`, and `admin/.env.example` to `admin/.en
 
 Base configuration reads settings from environment variables; the `dev` profile supplies documented local values and includes `db/dev` for later seed migrations. There are no seeded users or content. Set production credentials securely; never reuse the local examples. `POSTGRES_PASSWORD` and `DB_PASSWORD` must agree. Initialization settings only affect a fresh volume and do not rotate an existing database password.
 
-Forge temporarily denies all requests except GET health endpoints until the auth task replaces this policy. Swagger remains denied even in dev.
+Forge temporarily denies application routes until the auth task replaces this policy. Health endpoints are public. Swagger is available at /swagger-ui.html in dev; OPENAPI_ENABLED overrides documentation availability and defaults to false outside dev.
 
 The API client scaffold uses `VITE_API_URL`; requests include cookies and an in-memory access token, time out after 30s, and refresh/retry once after a 401. This is a client stub, not a login implementation.
 
@@ -118,4 +118,4 @@ curl --fail http://localhost:8026/api/v1/info
 curl --fail http://localhost:9000/minio/health/live
 ```
 
-The public API health response intentionally summarizes status. Maven integration tests additionally query PostgreSQL's migration history. Protected routes and Swagger return **403** by design; there is no working login yet. Open http://localhost:5174 on Windows to see the title-only scaffold. MinIO's console is http://localhost:9001 and Mailpit is http://localhost:8026.
+The public API health response intentionally summarizes status. Maven integration tests additionally query PostgreSQL's migration history. Protected application routes return **403** by design; there is no working login yet. Swagger is accessible in dev at http://localhost:8081/swagger-ui.html. Open http://localhost:5174 on Windows to see the title-only scaffold. MinIO's console is http://localhost:9001 and Mailpit is http://localhost:8026.
