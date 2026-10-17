@@ -44,18 +44,20 @@ class ApplicationTests {
     @Test
     void healthIncludesWorkingDatabaseAndMigratedSchema() throws Exception {
         mvc.perform(get("/actuator/health")).andExpect(status().isOk())
-            .andExpect(jsonPath("$.status").value("UP"));
+            .andExpect(jsonPath("$.status").value("UP")).andExpect(header().exists("X-Request-Id"));
         assertThat(jdbc.queryForObject("select count(*) from flyway_schema_history where success = true and version = '1'", Integer.class)).isEqualTo(1);
     }
 
     @Test
-    void documentationRemainsDeniedUntilAuthenticationIsImplemented() throws Exception {
-        mvc.perform(get("/v3/api-docs")).andExpect(status().isForbidden());
+    void documentationLoadsInDevelopment() throws Exception {
+        mvc.perform(get("/v3/api-docs")).andExpect(status().isOk()).andExpect(jsonPath("$.info.title").value("Forge API"));
+        mvc.perform(get("/swagger-ui/index.html")).andExpect(status().isOk());
     }
 
     @Test
     void applicationRoutesAreDeniedUntilTheirSecurityIsImplemented() throws Exception {
-        mvc.perform(get("/api/admin/users")).andExpect(status().isForbidden());
+        mvc.perform(get("/api/admin/users").header("X-Request-Id", "test-forbidden")).andExpect(status().isForbidden())
+            .andExpect(header().string("X-Request-Id", "test-forbidden"));
         mvc.perform(post("/internal/sync").contentType("application/json").content("{}"))
             .andExpect(status().isForbidden());
     }
