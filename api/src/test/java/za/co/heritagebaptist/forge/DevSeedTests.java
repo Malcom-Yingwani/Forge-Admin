@@ -35,7 +35,7 @@ class DevSeedTests {
 
     @Test
     void developmentProfileLoadsRequiredExamplesWithoutPrivateData() {
-        assertThat(flyway.info().applied()).hasSize(5);
+        assertThat(flyway.info().applied()).hasSize(6);
         assertCount("service_time", 2);
         assertCount("ministry", 4);
         assertCount("giving_fund", 3);

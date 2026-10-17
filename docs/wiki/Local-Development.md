@@ -119,3 +119,7 @@ curl --fail http://localhost:9000/minio/health/live
 ```
 
 The public API health response intentionally summarizes status. Maven integration tests additionally query PostgreSQL's migration history. Protected application routes return **401** until staff authenticate. POST email/password to `/api/auth/login` using the bootstrap account configured in your environment. An EDITOR receives **403** on administrator-only routes. Swagger is accessible in dev at http://localhost:8081/swagger-ui.html. Open http://localhost:5174 on Windows to see the title-only scaffold. MinIO's console is http://localhost:9001 and Mailpit is http://localhost:8026.
+
+## Media integration tests
+
+Maven verification now requires the pinned local MinIO image. Run `./scripts/build-minio.sh server-only` if the image is missing; normal setup builds both server and client images. CI builds the same checksum-verified server source and runs the full suite, including a 100 MB HTTP upload with a 256 MB application heap. Testcontainers owns and removes its test buckets, database and containers; these tests do not use the development stack's media bucket.

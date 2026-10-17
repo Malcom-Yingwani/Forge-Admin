@@ -21,7 +21,7 @@ To publish these pages to the GitHub Wiki tab, run `scripts/publish-wiki.sh`.
 
 ## Status
 
-Foundation scaffolds are implemented: local PostgreSQL/Mailpit infrastructure, a minimal Spring Boot API, a React/TypeScript frontend with brand tokens, and CI. Content, authentication, media, and sync features remain planned. See [Local Development](docs/wiki/Local-Development.md) for tested setup and run commands.
+The foundation, domain migrations, API conventions, staff authentication, login shell, shared UI components, audited content CRUD, and streamed media storage are implemented. Content-management screens and delivery to Heritage remain in progress; the sync hook currently does not send changes. See [Local Development](docs/wiki/Local-Development.md) for setup and verification commands.
 
 The remaining work is tracked in the [issues](https://github.com/Malcom-Yingwani/forge-admin/issues), grouped under epics.
 

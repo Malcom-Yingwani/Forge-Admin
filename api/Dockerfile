@@ -15,6 +15,7 @@ RUN --mount=type=cache,target=/root/.m2 \
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build --chown=10001:10001 /build/target/*-SNAPSHOT.jar /app/app.jar
+RUN mkdir -p /app/media && chown 10001:10001 /app/media
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=75" SERVER_ADDRESS=0.0.0.0
 USER 10001:10001
 EXPOSE 8081

@@ -1,10 +1,10 @@
 name: api
 on:
   pull_request:
-    paths: ['api/**', '.github/workflows/api.yml']
+    paths: ['api/**', '.github/workflows/api.yml', 'infra/minio/**', 'scripts/build-minio.sh']
   push:
     branches: [main]
-    paths: ['api/**', '.github/workflows/api.yml']
+    paths: ['api/**', '.github/workflows/api.yml', 'infra/minio/**', 'scripts/build-minio.sh']
 permissions:
   contents: read
 concurrency:
@@ -24,10 +24,23 @@ jobs:
           java-version: '21'
           cache: maven
           cache-dependency-path: api/pom.xml
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.24'
+          cache: false
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-minio-${{ hashFiles('scripts/build-minio.sh') }}
+      - run: ../scripts/build-minio.sh server-only
       - run: ./mvnw --batch-mode --no-transfer-progress verify
       - name: Upload test reports on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: api-test-reports
-          path: api/target/surefire-reports
+          path: |
+            api/target/surefire-reports
+            api/target/failsafe-reports

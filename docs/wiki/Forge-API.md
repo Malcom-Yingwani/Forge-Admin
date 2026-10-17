@@ -83,3 +83,11 @@ Failed logins are limited to five per normalized email and twenty per remote IP 
 All fourteen content types now have typed request/admin/public records, mappers, transactional services and controllers. Collection routes support search, validated sorting and paging; updates require the current `version` and return 409 on conflicts. Publishing, hiding and supported reordering routes audit every write and call `SyncHook`. Its default implementation is intentionally a no-op until the sync sender is installed.
 
 Giving-fund writes require ADMIN at the service layer; editors can read. Documents require text or a PDF, and publishing a person requires recorded consent. Public records omit private consent fields and mask non-public ministry/group contacts. Site settings are a singleton created with public defaults on first read. Blog publication dates can be scheduled; a persistent queue emits the change when due and survives process restarts.
+
+## Media storage
+
+`POST /api/admin/media` accepts a multipart `file`. Detection uses its bytes rather than its filename or supplied MIME type. Supported media are MP3/M4A (200 MB), JPEG/PNG/WebP (10 MB), and PDF (25 MB). Images also have a 20-megapixel decoded-size limit. Uploads spool to disk above 1 MB, hash while streaming, and use generated `yyyy/MM/UUID.ext` keys. Images create 320/960-width WebP variants without upscaling smaller sources; audio duration is read from file metadata.
+
+`MEDIA_STORAGE=local` uses `MEDIA_DIR`; `s3` uses the configured endpoint/bucket and streams large files in 8 MB multipart parts. The admin preview requires staff authorization. Referenced media cannot be deleted (409). Storage deletion is queued transactionally and retried after failures; rolled-back uploads queue any written keys for cleanup. Media upload calls `SyncHook.onMediaStored`; the real sender remains the next sync issue.
+
+`./mvnw verify` includes a separate integration-test JVM limited to 256 MB. It starts MinIO and PostgreSQL, uploads a generated 100 MB MP3 through the real HTTP multipart endpoint, and verifies the stored size. The same tests cover WebP variants, MIME spoofing, upload limits, authorization, previews, and referenced deletions.
